@@ -55,7 +55,9 @@ function Hero() {
 
   return (
     <div
-      style={{ backgroundImage: `url(./images/banner.webp)` }}
+      style={{
+        backgroundImage: `url(https://res.cloudinary.com/dmrw4vltk/image/upload/v1727712491/store/banner_j3cnbw.webp)`,
+      }}
       className=" w-full h-auto bg-cover bg-no-repeat bg-center bg-fixed m-0 p-0   "
     >
       <div className=" w-full h-[75vh] md:h-[100vh]  ">
@@ -162,7 +164,9 @@ function Hero() {
 
         {/* somethhing here */}
         <div
-          style={{ backgroundImage: `url(./images/hero-banner-2.jpeg)` }}
+          style={{
+            backgroundImage: `url(https://res.cloudinary.com/dmrw4vltk/image/upload/v1727712492/store/hero-banner-2_w1jf1k.jpg)`,
+          }}
           className="bg-cover bg-center   bg-no-repeat bg-fixed mt-[8rem] mb-10  w-full  h-auto    "
         >
           <div className=" w-full h-[90vh] md:h-[80vh]  bg-[#000] bg-opacity-[35%] bg-red-30 ">
