@@ -50,7 +50,7 @@ function Footer() {
           <img
             className=" ml-3 "
             width={100}
-            src="./images/logo.png"
+            src="https://res.cloudinary.com/dmrw4vltk/image/upload/v1727712505/store/logo.png"
             alt="brand-logo"
           />{" "}
         </div>
