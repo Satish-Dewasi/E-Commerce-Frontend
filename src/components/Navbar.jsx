@@ -44,9 +44,9 @@ function Navbar({ pageName }) {
     <div
       className={` ${
         flag ? "bg-white" : "bg-black text-white bg-opacity-[7%]"
-      }      relative w-full h-[10vh] md:h-[14vh] px-2 lg:px-10 flex items-center justify-between `}
+      }      relative w-full h-[10vh] md:h-[14vh] px-4 lg:px-10 flex items-center justify-between `}
     >
-      <div className=" w-1/2 flex items-center gap-10  ">
+      <div className=" bg-red-20 w-1/2  flex items-center gap-10  ">
         {/* Logo */}
         <NavLink
           to={"/"}
@@ -92,8 +92,8 @@ function Navbar({ pageName }) {
           )}
           <HiMiniShoppingBag
             onClick={DisplayCart}
-            className="  cursor-pointer  "
-            size={19}
+            className=" mb-1 sm:mb-0  cursor-pointer  "
+            size={21}
           />
         </div>
         <div className="hidden md:block  relative ">
@@ -123,8 +123,8 @@ function Navbar({ pageName }) {
             </div>
           )}
         </div>
-        <div className=" md:hidden cursor-pointer ">
-          <CgMenu onClick={() => setToggleNav(true)} size={22} />
+        <div className=" md:hidden cursor-pointer  ">
+          <CgMenu size={25} onClick={() => setToggleNav(true)} />
         </div>
       </div>
 

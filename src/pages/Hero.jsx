@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 function Hero() {
   const imagesBox = [
     {
-      title: "20% Off On Lorem",
+      title: "Let's Lorem it up",
       descryption:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit.Proin ac dictum.",
       button: "Shop now",
@@ -63,18 +63,18 @@ function Hero() {
       <div className=" w-full h-[75vh] md:h-[100vh]  ">
         <Navbar pageName={"hero"} />
 
-        <div className="   w-full h-[90%] md:h-[86vh] flex items-center  lg:items-start  gap-8 lg:gap-10  lg:pl-[60px] pt-[40px] lg:pt-[100px]  text-white font-sans flex-col ">
-          <h1 className="mt-[40px] md:mt-0  text-[5.5rem] lg:text-[7rem] leading-normal font-semibold ">
+        <div className=" bg-slate-900 bg-opacity-[20%] sm:bg-transparent   w-full h-[86.5%] md:h-[86vh] flex items-center  lg:items-start  gap-8 lg:gap-10  lg:pl-[60px] pt-[40px] lg:pt-[100px]  text-white font-sans flex-col ">
+          <h1 className="mt-[40px] md:mt-0 text-center sm:text-left  text-[5.6rem] lg:text-[7rem] leading-normal font-bold sm:font-semibold ">
             Raining Offers For <br /> Hot Summer!
           </h1>
-          <h2 className="mt-[20px] md:mt-0 font-sans text-[3rem]  md:text-[2.7rem] leading-normal font-semibold">
+          <h2 className="mt-[20px]  md:mt-0 font-sans text-[3.3rem]  md:text-[2.7rem] leading-normal font-semibold">
             25% Off On All Products
           </h2>{" "}
-          <div className=" mt-[40px] md:mt-5 w-[80%] md:w-auto flex gap-16 md:block items-center flex-col  ">
-            <button className=" w-full md:w-auto py-5 px-10 uppercase text-[2rem] md:text-[1.5rem]  bg-white text-black font-semibold hover:bg-black hover:text-white  ">
+          <div className=" mt-[60px] md:mt-5 w-[90%] sm:w-[80%] md:w-auto flex gap-16 md:block items-center flex-col  ">
+            <button className=" w-full md:w-auto py-5 px-10 uppercase text-[2.2rem] md:text-[1.5rem]  bg-white text-black font-semibold hover:bg-black hover:text-white  ">
               Shop Now
             </button>
-            <button className=" w-full md:w-auto py-5 px-10 uppercase text-[2rem] md:text-[1.5rem]  border-2 border-white text-white font-semibold hover:bg-white hover:text-black md:ml-8 ">
+            <button className=" w-full md:w-auto py-5 px-10 uppercase text-[2.2rem] md:text-[1.5rem]  border-2 border-white text-white font-semibold hover:bg-white hover:text-black md:ml-8 ">
               Find More
             </button>
           </div>
@@ -85,22 +85,22 @@ function Hero() {
         </div>
 
         {/* images container */}
-        <div className=" px-4 md:mt-[70px] w-full h-[230vh] md:h-[75vh]  flex flex-col md:flex-row items-center justify-evenly   ">
+        <div className=" px-0 sm:px-4 md:mt-[70px]  w-full h-[200vh] md:h-[75vh]  flex flex-col md:flex-row items-center justify-evenly   ">
           {imagesBox.map((box) => (
             <div
               key={box.title}
               style={{ backgroundImage: `url(${box.image})` }}
-              className=" w-[90%] md:w-[27%] h-[32%]  md:h-full   bg-center bg-cover bg-no-repeat "
+              className=" w-[95%] md:w-[27%] h-[32%]  md:h-full   bg-center bg-cover bg-no-repeat "
             >
-              <div className=" w-full h-full bg-gray-800 bg-opacity-[40%] flex items-end pb-20 justify-center ">
-                <div className="text-white  w-[86%] h-[42%] flex flex-col gap-3  ">
-                  <h1 className=" text-[2.9rem] leading-normal font-bold ">
+              <div className=" w-full h-full bg-gray-900 bg-opacity-[40%] flex items-end pb-20 justify-center ">
+                <div className="text-white  w-[86%] h-[55%] sm:h-[42%] flex flex-col gap-3  ">
+                  <h1 className=" text-[5rem] sm:text-[2.9rem] leading-normal font-bold ">
                     {box.title}
                   </h1>
-                  <h2 className=" font-sans text-[1.7rem] leading-normal font-semibold">
+                  <h2 className=" font-sans text-[2.5rem] sm:text-[1.7rem] leading-normal font-semibold">
                     {box.descryption}
                   </h2>
-                  <button className="mt-8 w-[50%] py-5 px-10 uppercase text-[1.5rem]  bg-white text-black font-semibold hover:bg-black hover:text-white  ">
+                  <button className="mt-10 sm:mt-8 w-[50%] py-5 px-10 uppercase text-[2rem] sm:text-[1.5rem]  bg-white text-black font-semibold hover:bg-black hover:text-white  ">
                     {box.button}
                   </button>
                 </div>
@@ -169,7 +169,7 @@ function Hero() {
           }}
           className="bg-cover bg-center   bg-no-repeat bg-fixed mt-[8rem] mb-10  w-full  h-auto    "
         >
-          <div className=" w-full h-[90vh] md:h-[80vh]  bg-[#000] bg-opacity-[35%] bg-red-30 ">
+          <div className=" w-full h-[68vh] md:h-[80vh]  bg-[#000] bg-opacity-[35%] bg-red-30 ">
             <div className=" pl-[4rem] md:pl-[13rem] w-full h-full flex items-center     ">
               <div className=" grid grid-cols-1 gap-y-[1rem] text-white w-[100%] md:w-[40%] h-auto  ">
                 <h2 className="text-[2.6rem] md:text-[2rem] roboto-regular font-[700] ">
@@ -196,7 +196,7 @@ function Hero() {
 
         {/* Properties container */}
 
-        <div className=" p-[4rem] mt-[5rem] md:mt-0  mb-[4rem] w-full min-h-[60vh] h-auto border-b-2 border-slate-300 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-[10rem]  justify-evenly ">
+        <div className="p-[2rem] sm:p-[4rem] mt-[5rem] md:mt-0  mb-[4rem] w-full min-h-[60vh] h-auto border-b-2 border-slate-300 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-[10rem]  justify-evenly ">
           <div className="  text-center h-auto  flex flex-col gap-y-4  items-center justify-center roboto-regular text-black ">
             <CiDeliveryTruck size={55} />
             <h1 className="text-[2.6rem] md:text-[2rem] font-bold capitalize ">

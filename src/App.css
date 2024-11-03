@@ -86,7 +86,7 @@ input[type="range"]::-moz-range-thumb {
 
 .footer-grid-item {
   /* border: black 1px solid; */
-  height: 25vh;
+  height: 20vh;
   display: flex;
   align-items: center;
 
@@ -138,7 +138,7 @@ input[type="range"]::-moz-range-thumb {
 
 @media (min-width: 1000px) {
   .footer-grid {
-    grid-template-columns: 21.5% 21% 22% 30%; /* 4 columns for screens ≥ 1000px */
+    grid-template-columns: 25% 43% 28%; /* 4 columns for screens ≥ 1000px */
   }
 }
 input[type="range"] {
