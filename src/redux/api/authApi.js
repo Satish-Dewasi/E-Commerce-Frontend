@@ -9,6 +9,7 @@ import {
 
 // Create a custom baseQuery to handle token refreshing
 const baseQuery = fetchBaseQuery({
+  // baseUrl: "http://localhost:5000/api/v1",
   baseUrl: "https://e-commerce-backend-j03d.onrender.com/api/v1",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.accessToken;
@@ -64,7 +65,14 @@ export const authApi = createApi({
         }
       },
     }),
+
+    // admin routes
+    getUsers: builder.query({
+      query: () => "admin/users",
+    }),
   }),
 });
 
-export const { useGetProfileQuery } = authApi;
+export const { useGetProfileQuery, useGetUsersQuery } = authApi;
+
+//   baseUrl: "https://e-commerce-backend-j03d.onrender.com/api/v1",

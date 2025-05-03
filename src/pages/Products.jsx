@@ -12,9 +12,10 @@ import {
   useSearchProductsQuery,
 } from "../redux/api/productApi";
 import ProductNotFound from "../components/ProductNotFound";
+import ProductLoader from "../utils/ProductLoader";
 
 function Products() {
-  let Loading = false;
+  const [loading, setLoading] = useState(true);
 
   const { category } = useParams();
   const [minPrice, setMinPrice] = useState(0);
@@ -35,6 +36,7 @@ function Products() {
   useEffect(() => {
     if (data) {
       setProducts(data.products);
+      setLoading(isLoading);
     }
   }, [data, minPrice, maxPrice, category]);
 
@@ -75,53 +77,51 @@ function Products() {
             )}
           </div>
           {/* product listing */}
-          {products?.length === 0 ? (
+          {loading ? (
+            <ProductLoader />
+          ) : products?.length === 0 ? (
             <ProductNotFound />
           ) : (
             <div className="mt-3 lg:mt-6 w-full h-full grid grid-cols-2  sm:grid-cols-3 gap-x-10 gap-y-[4rem]  ">
-              {Loading ? (
-                <h1>Loadiing...</h1>
-              ) : (
-                products.map((product) => (
-                  <Link
-                    to={`.${category ? "" : "/product"}/${product._id}`}
-                    className=" cursor-pointer  h-fit lg:h-fit "
-                    key={product._id}
-                  >
-                    <div
-                      style={{
-                        backgroundImage: `url(${product.images})`,
-                      }}
-                      className="w-full bg-cover bg-center bg-no-repeat aspect-square  "
-                    ></div>
+              {products.map((product) => (
+                <Link
+                  to={`.${category ? "" : "/product"}/${product._id}`}
+                  className=" cursor-pointer  h-fit lg:h-fit "
+                  key={product._id}
+                >
+                  <div
+                    style={{
+                      backgroundImage: `url(${product.images})`,
+                    }}
+                    className="w-full bg-cover bg-center bg-no-repeat aspect-square  "
+                  ></div>
 
-                    <div className=" p-2 flex flex-col font-sans w-full min-h-fit  ">
-                      <h1 className=" text-black text-[2rem] font-semibold ">
-                        {product.name}
-                      </h1>
-                      <p className=" capitalize text-gray-500 text-[1.5rem] ">
-                        {product.category}
-                      </p>
-                      <div className=" text-gray-800 text-[1.8rem] font-semibold ">
-                        {`$${product.price}`}
-                      </div>
-                      {/* rating */}
-                      <div className=" mt-2 flex text-[1.7rem] tracking-wide ">
-                        <TiStarFullOutline /> <TiStarFullOutline />
-                        <TiStarFullOutline /> <TiStarHalfOutline />{" "}
-                        <TiStarOutline />
-                      </div>
-                      {/* color */}
-
-                      <div className=" mt-4 flex gap-4 ">
-                        <div className=" w-8 h-8 rounded-full bg-black "></div>
-                        <div className=" w-8 h-8 rounded-full bg-[#1fb1c1] "></div>
-                        <div className=" w-8 h-8 rounded-full bg-[#ce592f] "></div>
-                      </div>
+                  <div className=" p-2 flex flex-col font-sans w-full min-h-fit  ">
+                    <h1 className=" text-black text-[2rem] font-semibold ">
+                      {product.name}
+                    </h1>
+                    <p className=" capitalize text-gray-500 text-[1.5rem] ">
+                      {product.category}
+                    </p>
+                    <div className=" text-gray-800 text-[1.8rem] font-semibold ">
+                      {`$${product.price}`}
                     </div>
-                  </Link>
-                ))
-              )}
+                    {/* rating */}
+                    <div className=" mt-2 flex text-[1.7rem] tracking-wide ">
+                      <TiStarFullOutline /> <TiStarFullOutline />
+                      <TiStarFullOutline /> <TiStarHalfOutline />{" "}
+                      <TiStarOutline />
+                    </div>
+                    {/* color */}
+
+                    <div className=" mt-4 flex gap-4 ">
+                      <div className=" w-8 h-8 rounded-full bg-black "></div>
+                      <div className=" w-8 h-8 rounded-full bg-[#1fb1c1] "></div>
+                      <div className=" w-8 h-8 rounded-full bg-[#ce592f] "></div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
           )}
           {/* adding pagination */}

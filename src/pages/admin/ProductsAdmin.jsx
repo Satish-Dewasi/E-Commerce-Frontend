@@ -3,12 +3,18 @@ import StockBar from "../../components/StockBar";
 import { MdAdd } from "react-icons/md";
 import { CiStar } from "react-icons/ci";
 import { Link } from "react-router-dom";
+import { useGetAllProductsQuery } from "../../redux/api/productApi";
+import Navbar from "../../components/Navbar";
 
 function Products() {
-  const [product, setProduct] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const { data, isLoading, isError, error } = useGetAllProductsQuery(1);
+
+  // console.log(data?.products[0].images);
 
   return (
     <div className="w-full bg-red-3 h-auto  ">
+      {/* <Navbar pageName={"simple"} /> */}
+
       {/* heading */}
       <div className="w-full h-auto flex items-center justify-between ">
         <h1 className=" w-[50%] font-sans font-[500] text-[2.7rem]  ">
@@ -52,35 +58,48 @@ function Products() {
           </thead>
 
           <tbody>
-            {product.map((product) => (
-              <tr key={product} className="border-b font-sans text-[1.5rem]">
-                <td className="border text-center">1</td>
-                <td className=" flex items-center justify-center">
-                  <div className="w-[98%] h-[80px] flex items-center justify-evenly">
-                    <div
-                      style={{
-                        backgroundImage: `url(./images/products/green-shoes.jpg)`,
-                      }}
-                      className="shadow-sm h-[70%] aspect-square bg-cover bg-no-repeat bg-center"
-                    ></div>
-                    <div className="flex items-start justify-center flex-col filterbar-bestseller-product-custom-width text-[1.6rem] font-sans h-[70%]">
-                      <h1>Buddha Bracelet</h1>
-                      <div className="flex">
-                        <CiStar />
-                        <CiStar />
-                        <CiStar />
-                        <CiStar />
-                        <CiStar />
+            {isLoading ? (
+              <tr>
+                <td colSpan="6" className="text-center">
+                  Loading...
+                </td>
+              </tr>
+            ) : (
+              data?.products.map((product, index) => (
+                <tr
+                  key={product._id}
+                  className="border-b font-sans text-[1.5rem]"
+                >
+                  <td className="border text-center">{index + 1}</td>
+                  <td className="flex items-center justify-center">
+                    <div className="w-[98%] h-[80px] flex items-center justify-evenly">
+                      <div
+                        style={{
+                          backgroundImage: `url(${product.images})`,
+                        }}
+                        className="shadow-sm h-[70%] aspect-square bg-cover bg-no-repeat bg-center"
+                      ></div>
+                      <div className="flex items-start justify-center flex-col filterbar-bestseller-product-custom-width text-[1.6rem] font-sans h-[70%]">
+                        <h1>{product.name}</h1>
+                        <div className="flex">
+                          <CiStar />
+                          <CiStar />
+                          <CiStar />
+                          <CiStar />
+                          <CiStar />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </td>
-                <td className="border text-center">Accessories</td>
-                <td className="border text-center">$199</td>
-                <td className="border text-center">69</td>
-                <td className="border text-center">Delete</td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="border capitalize text-center">
+                    {product.category}
+                  </td>
+                  <td className="border text-center">${product.price}</td>
+                  <td className="border text-center">{product.stock}</td>
+                  <td className="border text-center">Delete</td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

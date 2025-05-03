@@ -13,16 +13,14 @@ const cartSlice = createSlice({
       state.showCart = action.payload;
     },
     addProductInCart: (state, action) => {
-      const product = action.payload;
-      // Check if the product is already in the cart
+      const { product, productQuantity } = action.payload;
+
       const existingProduct = state.products.find((p) => p._id === product._id);
 
       if (existingProduct) {
-        // If it exists, increase the quantity
-        existingProduct.quantity += 1;
+        existingProduct.quantity += productQuantity;
       } else {
-        // If it doesn't exist, add it to the cart with quantity 1
-        state.products.push({ ...product, quantity: 1 });
+        state.products.push({ ...product, quantity: productQuantity });
       }
     },
     removeProductInCart: (state, action) => {},

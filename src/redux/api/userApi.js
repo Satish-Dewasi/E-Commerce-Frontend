@@ -5,7 +5,8 @@ import { setAccessToken } from "../slices/userSlice";
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `http://localhost:5000/api/v1`,
+    // baseUrl: `http://localhost:5000/api/v1`,
+    baseUrl: "https://e-commerce-backend-j03d.onrender.com/api/v1",
     credentials: "include",
   }),
 

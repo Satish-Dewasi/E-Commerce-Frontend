@@ -14,6 +14,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import { useRefreshTokenMutation } from "./redux/api/userApi";
 import { useGetProfileQuery } from "./redux/api/authApi";
+import Navbar from "./components/Navbar";
+import Module from "./pages/admin/Module";
 
 function App() {
   const showCart = useSelector((state) => state.Cart.showCart);
@@ -59,21 +61,21 @@ function App() {
   return (
     <div className=" w-full h-auto  ">
       {showCart && <Cart />}
-      {/* {showSignupPage && <SignUp />} */}
+      {showSignupPage && <SignUp />}
       <main>
+        {/* <Navbar /> */}
         <Routes>
           <Route index element={<Hero />} />
           <Route path="/store" element={<Products />} />
           <Route path="/store/:category" element={<Products />} />
-          <Route path="/store/products/:id" element={<ProductDetail />} />
+          <Route path="/store/product/:id" element={<ProductDetail />} />
           <Route path="/store/:category/:id" element={<ProductDetail />} />
 
           {/* protected routes */}
           <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/products" element={<ProductsAdmin />} />
-          <Route path="/admin/products/add" element={<AddNewProduct />} />
+          {/* <Route path="/admin/dashboard/:module" element={<Module />} /> */}
 
-          <Route path="/admin/orders" element={<Orders />} />
+          <Route path="/admin/products/add" element={<AddNewProduct />} />
         </Routes>
       </main>
       <Toaster />

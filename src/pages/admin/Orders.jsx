@@ -2,13 +2,20 @@ import React, { useState } from "react";
 import StockBar from "../../components/StockBar";
 import { MdAdd } from "react-icons/md";
 import { CiStar } from "react-icons/ci";
+import Navbar from "../../components/Navbar";
+import { useParams } from "react-router-dom";
 
 function Orders() {
   const [product, setProduct] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
+  const param = useParams();
+  console.log(param);
+
   return (
     <div className="w-full bg-red-3 h-auto  ">
       {/* heading */}
+      {/* <Navbar pageName={"simple"} /> */}
+
       <div className="w-full h-auto flex items-center justify-between ">
         <h1 className=" w-[50%] font-sans font-[500] text-[2.7rem]  ">
           Orders
