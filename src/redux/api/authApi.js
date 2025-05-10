@@ -9,8 +9,9 @@ import {
 
 // Create a custom baseQuery to handle token refreshing
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api/v1",
-  // baseUrl: "https://e-commerce-backend-j03d.onrender.com/api/v1",
+  //baseUrl: "http://localhost:5000/api/v1",
+  baseUrl: "https://e-commerce-backend-j03d.onrender.com/api/v1",
+  credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.accessToken;
     if (token) {
