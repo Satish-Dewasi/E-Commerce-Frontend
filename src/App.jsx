@@ -16,6 +16,7 @@ import { useRefreshTokenMutation } from "./redux/api/userApi";
 import { useGetProfileQuery } from "./redux/api/authApi";
 import Navbar from "./components/Navbar";
 import Module from "./pages/admin/Module";
+import Checkout from "./components/Checkouts";
 
 function App() {
   const showCart = useSelector((state) => state.Cart.showCart);
@@ -76,6 +77,9 @@ function App() {
           {/* <Route path="/admin/dashboard/:module" element={<Module />} /> */}
 
           <Route path="/admin/products/add" element={<AddNewProduct />} />
+
+          {/* ordder routes */}
+          <Route path="/orders/checkouts" element={<Checkout />} />
         </Routes>
       </main>
       <Toaster />

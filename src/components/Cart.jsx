@@ -3,6 +3,7 @@ import { MdClose } from "react-icons/md";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowCart } from "../redux/slices/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -12,12 +13,20 @@ function Cart() {
   };
 
   const products = useSelector((state) => state.Cart.products);
+  const user = useSelector((state) => state.auth.user);
 
   //console.log(products);
 
   const subtotal = products.reduce((total, product) => {
     return total + product.price * product.quantity;
   }, 0);
+
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    dispatch(setShowCart(false));
+    navigate("orders/checkouts");
+  };
 
   return (
     <div className=" w-full h-[100vh] absolute flex items-end justify-end bg-black bg-opacity-[35%] z-30 ">
@@ -94,7 +103,10 @@ function Cart() {
             <button className=" w-full bg-[#0075be] text-[1.7rem] uppercase tracking-wider font-[600] text-white px-8 py-4 ">
               View Cart
             </button>
-            <button className=" w-full bg-[#0075be] text-[1.7rem] uppercase tracking-wider font-[600] text-white px-8 py-4 ">
+            <button
+              onClick={handleCheckout}
+              className=" w-full bg-[#0075be] text-[1.7rem] uppercase tracking-wider font-[600] text-white px-8 py-4 "
+            >
               Checkout
             </button>
           </div>
