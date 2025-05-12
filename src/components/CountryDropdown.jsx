@@ -16,8 +16,8 @@ const CountrySelector = () => {
   const [selectedCountry, setSelectedCountry] = useState(defaultCountry);
 
   return (
-    <div className=" w-[85%] ">
-      <label className="block text-[1.8rem] font-semibold text-gray-700">
+    <div className=" w-full md:w-[85%]  ">
+      <label className="block text-[1.8rem] md:text-[1.5rem] font-semibold text-gray-700">
         Country or Region
       </label>
       <Select
@@ -25,7 +25,7 @@ const CountrySelector = () => {
         value={selectedCountry}
         onChange={setSelectedCountry}
         isSearchable
-        className="text-[1.6rem] p-2 ml-[-5px] "
+        className="text-[1.8rem] md:text-[1.5rem] p-2 ml-[-5px] "
       />
     </div>
   );

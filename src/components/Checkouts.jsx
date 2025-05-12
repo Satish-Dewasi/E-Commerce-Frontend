@@ -89,9 +89,9 @@ const CheckoutForm = ({ products, user }) => {
   }, 0);
 
   return (
-    <div className="w-full h-full  flex items-center justify-center gap-[2vw] bg--100">
-      <div className="bg--200 pt-[3%] p-5  rounded-2xl w-[35%] h-[100vh]  space-y-6">
-        <h2 className=" w-[85%]  text-5xl font-semibold text-start text-gray-800">
+    <div className=" bg-rd-100 w-full h-[100vh] p-4 md:p-0 flex flex-col items-center md:flex-row md:items-start justify-center gap-[2vw] bg--100">
+      <div className="bg-rd-200 pt-[3%] p-5  rounded-2xl w-full md:w-[35%] h-auto  space-y-6">
+        <h2 className=" w-[85%]  text-7xl md:text-5xl font-semibold text-start text-gray-800">
           {"$" + subtotal}
         </h2>
         <br />
@@ -124,17 +124,17 @@ const CheckoutForm = ({ products, user }) => {
         </div>
       </div>
 
-      <div className="w-[40%] h-[100vh] shadow-[-8px_0px_24px_rgba(149,157,165,0.2)] bg--400 py-8 ">
+      <div className="w-full p-4 md:p-0 b-green-200 md:w-[40%] bg-gren-400 h-auto  md:h-[100vh] shadow-[-8px_0px_24px_rgba(149,157,165,0.2)] py-16 md:py-[4.5rem] ">
         <form
           onSubmit={handleSubmit}
-          className="bg-white  w-full h-full   pr-16 flex flex-col items-end justify-center space-y-3"
+          className="bg-ed-200  w-full h-full    md:pr-16 flex flex-col items-center md:items-end justify-center md:justify-start space-y-3"
         >
-          <h2 className=" w-[85%]  text-4xl font-semibold text-start text-gray-800">
+          <h2 className=" w-full md:w-[85%] text-5xl  md:text-5xl font-semibold text-start text-gray-800">
             Pay with card
           </h2>
           <br />
-          <div className="w-[85%]">
-            <label className="  block mb-2 text-[1.5rem] font-medium text-gray-700">
+          <div className="w-full md:w-[85%]  ">
+            <label className="  block mb-2 text-[1.8rem] md:text-[1.5rem] font-medium text-gray-700">
               Card Number
             </label>
             <div className="p-3 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500">
@@ -142,8 +142,8 @@ const CheckoutForm = ({ products, user }) => {
             </div>
           </div>
 
-          <div className="w-[85%]">
-            <label className="block mb-2 text-[1.5rem] font-medium text-gray-700">
+          <div className="w-full md:w-[85%] ">
+            <label className="block mb-2 text-[1.8rem] md:text-[1.5rem] font-medium text-gray-700">
               Expiry Date
             </label>
             <div className="p-3 border border-gray-300 rounded-md  focus-within:ring-2 focus-within:ring-blue-500">
@@ -151,8 +151,8 @@ const CheckoutForm = ({ products, user }) => {
             </div>
           </div>
 
-          <div className="w-[85%]">
-            <label className="block mb-2 text-[1.5rem] font-medium text-gray-700">
+          <div className="w-full md:w-[85%] ">
+            <label className="block mb-2 text-[1.8rem] md:text-[1.5rem] font-medium text-gray-700">
               CVC
             </label>
             <div className="p-3 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500">
@@ -160,8 +160,8 @@ const CheckoutForm = ({ products, user }) => {
             </div>
           </div>
 
-          <div className="w-[85%]">
-            <label className="block mb-2 text-[1.5rem] font-medium text-[#32325d] placeholder-[16px] placeholder-[font-weight:600] ">
+          <div className="w-full md:w-[85%] ">
+            <label className="block mb-2 text-[1.8rem] md:text-[1.5rem] font-medium text-[#32325d] placeholder-[16px] placeholder-[font-weight:600] ">
               Cardholder Name
             </label>
             <input
@@ -181,7 +181,7 @@ const CheckoutForm = ({ products, user }) => {
           <button
             type="submit"
             disabled={!stripe}
-            className="w-[85%] bg-blue-600 text-[1.8rem] font-bold tracking-wider text-white py-4 px-4 rounded hover:bg-blue-700 transition disabled:opacity-50"
+            className="w-full md:w-[85%]  bg-blue-600 text-[1.8rem] font-bold tracking-wider text-white py-4 px-4 rounded hover:bg-blue-700 transition disabled:opacity-50"
           >
             Pay
           </button>
