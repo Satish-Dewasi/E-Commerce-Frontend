@@ -1,0 +1,213 @@
+import React, { useEffect, useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardNumberElement,
+  CardExpiryElement,
+  CardCvcElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { useCheckoutsMutation } from "../redux/api/orderApi";
+import { useSelector } from "react-redux";
+import CountryDropdown from "./CountryDropdown";
+import { IoIosCloseCircleOutline } from "react-icons/io";
+
+const stripePromise = loadStripe(
+  "pk_test_51RNQqqRef58FFuk0aFT82dOsVtv0kbeqFFXy4s0zz7pNwySq3zHBvNmz9hsRFHwj2s7M3lXqphKp8m1qt04Ddaaf00VCV5WRq0"
+);
+
+const CheckoutForm = ({ products, user }) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [clientSecret, setClientSecret] = useState("");
+  const [cardholderName, setCardholderName] = useState("");
+  const [checkouts] = useCheckoutsMutation();
+
+  useEffect(() => {
+    const getClientSecret = async () => {
+      if (!user || !user._id || products.length === 0) return;
+
+      try {
+        const response = await checkouts({
+          cartItems: products,
+          userId: user._id,
+        }).unwrap();
+        setClientSecret(response.clientSecret);
+      } catch (error) {
+        console.error("Stripe Payment Intent Error:", error);
+      }
+    };
+
+    getClientSecret();
+  }, [products, user, checkouts]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+
+    const cardNumberElement = elements.getElement(CardNumberElement);
+
+    const result = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: cardNumberElement,
+        billing_details: {
+          name: cardholderName,
+        },
+      },
+    });
+
+    if (result.error) {
+      console.error(result.error.message);
+      alert("Payment failed");
+    } else if (result.paymentIntent.status === "succeeded") {
+      alert("Payment successful");
+    }
+  };
+
+  const elementStyles = {
+    style: {
+      base: {
+        fontSize: "16px",
+        color: "#32325d",
+        fontFamily: "Arial, sans-serif",
+        "::placeholder": {
+          color: "#a0aec0",
+          fontWeight: "normal",
+          fontSize: "14px",
+        },
+      },
+      invalid: {
+        color: "#e53e3e",
+        iconColor: "#e53e3e",
+      },
+    },
+  };
+
+  const subtotal = products?.reduce((total, product) => {
+    return total + product.price * product.quantity;
+  }, 0);
+
+  return (
+    <div className="w-full h-full  flex items-center justify-center gap-[2vw] bg--100">
+      <div className="bg--200 pt-[3%] p-5  rounded-2xl w-[35%] h-[100vh]  space-y-6">
+        <h2 className=" w-[85%]  text-5xl font-semibold text-start text-gray-800">
+          {"$" + subtotal}
+        </h2>
+        <br />
+        <div className=" ml-[-15px] w-[98%] h-[55%] g-purple-300  bg--200   ">
+          {products.map((product) => (
+            <div
+              key={product._id}
+              className="p-[2rem]   flex items-center justify-between   roboto-regular text-black font-[500] text-[2rem] "
+            >
+              {/* cart product */}
+              <div className="  w-[70%] h-[70px] flex items-center justify-evenly   ">
+                <div
+                  style={{
+                    backgroundImage: `url(${product.images})`,
+                  }}
+                  className=" shadow-sm h-full aspect-square bg-cover bg-no-repeat bg-center "
+                ></div>
+                <div className="  filterbar-bestseller-product-custom-width text-[1.8rem] font-sans h-full flex flex-col items-start justify-center pl-5  ">
+                  <h1 className="font-[400]">{product.name}</h1>
+                </div>
+              </div>
+              {/* ////// */}
+              <div className=" h-[70px] w-[20%] flex items-center justify-end   ">
+                <span className=" font-[400] text-gray-700 ">
+                  {product.quantity} × ${product.price}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="w-[40%] h-[100vh] shadow-[-8px_0px_24px_rgba(149,157,165,0.2)] bg--400 py-8 ">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white  w-full h-full   pr-16 flex flex-col items-end justify-center space-y-3"
+        >
+          <h2 className=" w-[85%]  text-4xl font-semibold text-start text-gray-800">
+            Pay with card
+          </h2>
+          <br />
+          <div className="w-[85%]">
+            <label className="  block mb-2 text-[1.5rem] font-medium text-gray-700">
+              Card Number
+            </label>
+            <div className="p-3 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500">
+              <CardNumberElement options={elementStyles} />
+            </div>
+          </div>
+
+          <div className="w-[85%]">
+            <label className="block mb-2 text-[1.5rem] font-medium text-gray-700">
+              Expiry Date
+            </label>
+            <div className="p-3 border border-gray-300 rounded-md  focus-within:ring-2 focus-within:ring-blue-500">
+              <CardExpiryElement options={elementStyles} />
+            </div>
+          </div>
+
+          <div className="w-[85%]">
+            <label className="block mb-2 text-[1.5rem] font-medium text-gray-700">
+              CVC
+            </label>
+            <div className="p-3 border border-gray-300 rounded-md focus-within:ring-2 focus-within:ring-blue-500">
+              <CardCvcElement options={elementStyles} />
+            </div>
+          </div>
+
+          <div className="w-[85%]">
+            <label className="block mb-2 text-[1.5rem] font-medium text-[#32325d] placeholder-[16px] placeholder-[font-weight:600] ">
+              Cardholder Name
+            </label>
+            <input
+              type="text"
+              value={cardholderName}
+              onChange={(e) => setCardholderName(e.target.value)}
+              placeholder="full name on card"
+              className="p-3 text-base text-[#32325d] font-sans placeholder:text-[1.6rem] placeholder:text-[#a0aec0] placeholder:font-normal border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+
+          {/* country */}
+          <CountryDropdown />
+
+          <br />
+          <button
+            type="submit"
+            disabled={!stripe}
+            className="w-[85%] bg-blue-600 text-[1.8rem] font-bold tracking-wider text-white py-4 px-4 rounded hover:bg-blue-700 transition disabled:opacity-50"
+          >
+            Pay
+          </button>
+
+          <br />
+          <div className=" w-full text-center ">
+            <p className="text-[1.4rem] text-gray-500 ">
+              Powered by{" "}
+              <span className="text-[1.5rem] font-bold ">stripe</span>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const Checkout = () => {
+  const products = useSelector((state) => state.Cart.products);
+  const user = useSelector((state) => state.auth.user);
+
+  return (
+    <Elements stripe={stripePromise}>
+      <CheckoutForm products={products} user={user} />
+    </Elements>
+  );
+};
+
+export default Checkout;
