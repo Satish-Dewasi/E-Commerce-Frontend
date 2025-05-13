@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,9 +28,27 @@ function Cart() {
     navigate("orders/checkouts");
   };
 
+  const scrollRef = useRef(null);
+  const [showScrollHint, setShowScrollHint] = useState(products.length > 4);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollRef.current.scrollTop > 10) {
+        setShowScrollHint(false);
+      }
+    };
+
+    const cartElement = scrollRef.current;
+    cartElement?.addEventListener("scroll", handleScroll);
+
+    return () => {
+      cartElement?.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <div className=" w-full h-[100vh] absolute flex items-end justify-end bg-black bg-opacity-[35%] z-30 ">
-      <div className="   w-[480px]  z-[9999] h-[100vh] r bg-gray-100 shadow-md ">
+      <div className="   w-[480px]  z-[9999] h-[100vh]  bg-gray-100 shadow-md ">
         <div className=" w-full h-full bg--200 ">
           {/* Heading */}
           <div className="p-[2rem]   flex items-center justify-between border-b border-slate-300  roboto-regular text-black font-[500] text-[2rem] ">
@@ -57,7 +75,10 @@ function Cart() {
               </h1>
             </div>
           ) : (
-            <div className=" w-full h-[55%]  bg--200 border-b border-slate-300 ">
+            <div
+              ref={scrollRef}
+              className=" relative w-full h-[58.5%] max-h-[58.5vh] overflow-y-auto  bg-en-200 border-b border-slate-300 "
+            >
               {products.map((product) => (
                 <div
                   key={product._id}
@@ -88,6 +109,11 @@ function Cart() {
                   </div>
                 </div>
               ))}
+              {showScrollHint && products.length > 4 && (
+                <div className=" absolute text-center text-[20px] font-semibold left-[33%] top-[53.5vh] ">
+                  Scroll for more 👇
+                </div>
+              )}
             </div>
           )}
 

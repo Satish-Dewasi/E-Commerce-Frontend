@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
@@ -42,6 +42,24 @@ const CheckoutForm = ({ products, user }) => {
     getClientSecret();
   }, [products, user, checkouts]);
 
+  const scrollRef = useRef(null);
+  const [showScrollHint, setShowScrollHint] = useState(products.length > 4);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollRef.current.scrollTop > 10) {
+        setShowScrollHint(false);
+      }
+    };
+
+    const cartElement = scrollRef.current;
+    cartElement?.addEventListener("scroll", handleScroll);
+
+    return () => {
+      cartElement?.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return;
@@ -56,6 +74,8 @@ const CheckoutForm = ({ products, user }) => {
         },
       },
     });
+
+    console.log(result);
 
     if (result.error) {
       console.error(result.error.message);
@@ -89,13 +109,16 @@ const CheckoutForm = ({ products, user }) => {
   }, 0);
 
   return (
-    <div className=" bg-rd-100 w-full h-[100vh] p-4 md:p-0 flex flex-col items-center md:flex-row md:items-start justify-center gap-[2vw] bg--100">
-      <div className="bg-rd-200 pt-[3%] p-5  rounded-2xl w-full md:w-[35%] h-auto  space-y-6">
+    <div className=" bg-rd-100 w-ful h-auto p-4 md:p-0 flex flex-col items-center md:flex-row md:items-start justify-center gap-[2vw] bg--100">
+      <div className="bgred-400  pt-[3%]   rounded-2xl w-full md:w-[35%] h-auto  max:h-[70vh]  md:h-[100vh]  space-y-6">
         <h2 className=" w-[85%]  text-7xl md:text-5xl font-semibold text-start text-gray-800">
           {"$" + subtotal}
         </h2>
         <br />
-        <div className=" ml-[-15px] w-[98%] h-[55%] g-purple-300  bg--200   ">
+        <div
+          ref={scrollRef}
+          className="  w-[98%] h-auto max:h-[60vh] md:h-[60%] md:max-h-[60vh] overflow-y-auto bg-purle-300  bg--200   "
+        >
           {products.map((product) => (
             <div
               key={product._id}
@@ -122,12 +145,17 @@ const CheckoutForm = ({ products, user }) => {
             </div>
           ))}
         </div>
+        {showScrollHint && products.length > 4 && (
+          <div className=" hidden md:block absolute text-center text-[20px] font-semibold left-[23%] top-[66.5vh] ">
+            Scroll for more 👇
+          </div>
+        )}
       </div>
 
-      <div className="w-full p-4 md:p-0 b-green-200 md:w-[40%] bg-gren-400 h-auto  md:h-[100vh] shadow-[-8px_0px_24px_rgba(149,157,165,0.2)] py-16 md:py-[4.5rem] ">
+      <div className="w-full p-4 md:p-0 bg-geen-200 md:w-[40%] bg-gren-400 h-auto  md:h-[100vh] shadow-[-8px_0px_24px_rgba(149,157,165,0.2)] py-16 md:py-[4.5rem] ">
         <form
           onSubmit={handleSubmit}
-          className="bg-ed-200  w-full h-full    md:pr-16 flex flex-col items-center md:items-end justify-center md:justify-start space-y-3"
+          className="bgred-200  w-full h-full    md:pr-16 flex flex-col items-center md:items-end justify-center md:justify-start space-y-3"
         >
           <h2 className=" w-full md:w-[85%] text-5xl  md:text-5xl font-semibold text-start text-gray-800">
             Pay with card
