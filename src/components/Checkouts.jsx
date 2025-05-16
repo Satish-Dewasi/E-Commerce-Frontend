@@ -8,10 +8,14 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import { useCheckoutsMutation } from "../redux/api/orderApi";
+import {
+  useCheckoutsMutation,
+  useUpdatePaymentStatusMutation,
+} from "../redux/api/orderApi";
 import { useSelector } from "react-redux";
 import CountryDropdown from "./CountryDropdown";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import PaymentPopup from "./PaymentPopup";
 
 const stripePromise = loadStripe(
   "pk_test_51RNQqqRef58FFuk0aFT82dOsVtv0kbeqFFXy4s0zz7pNwySq3zHBvNmz9hsRFHwj2s7M3lXqphKp8m1qt04Ddaaf00VCV5WRq0"
@@ -60,12 +64,17 @@ const CheckoutForm = ({ products, user }) => {
     };
   }, []);
 
+  const [showPaymentProcessingPopUp, setShowPaymentProcessingPopUp] =
+    useState(false);
+  const [paymentStatus, setPaymentStatus] = useState("");
+  const [updatePaymentStatus] = useUpdatePaymentStatusMutation();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return;
 
     const cardNumberElement = elements.getElement(CardNumberElement);
-
+    setShowPaymentProcessingPopUp(true);
     const result = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
         card: cardNumberElement,
@@ -75,13 +84,19 @@ const CheckoutForm = ({ products, user }) => {
       },
     });
 
-    console.log(result);
+    // console.log(result.paymentIntent.status);
+    setPaymentStatus(result.paymentIntent.status);
+
+    if (result.paymentIntent.status === "succeeded") {
+      await updatePaymentStatus({
+        paymentIntentId: result.paymentIntent.id,
+        status: "succeeded",
+      });
+    }
 
     if (result.error) {
       console.error(result.error.message);
-      alert("Payment failed");
-    } else if (result.paymentIntent.status === "succeeded") {
-      alert("Payment successful");
+      // alert("Payment failed");
     }
   };
 
@@ -223,6 +238,7 @@ const CheckoutForm = ({ products, user }) => {
           </div>
         </form>
       </div>
+      {showPaymentProcessingPopUp && <PaymentPopup payment={paymentStatus} />}
     </div>
   );
 };

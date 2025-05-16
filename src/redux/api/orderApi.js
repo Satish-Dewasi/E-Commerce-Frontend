@@ -16,7 +16,15 @@ export const orderApi = createApi({
         body: payload,
       }),
     }),
+    updatePaymentStatus: builder.mutation({
+      query: (payload) => ({
+        url: "/orders/payment-update",
+        method: "POST",
+        body: payload,
+      }),
+    }),
   }),
 });
 
-export const { useCheckoutsMutation } = orderApi;
+export const { useCheckoutsMutation, useUpdatePaymentStatusMutation } =
+  orderApi;
