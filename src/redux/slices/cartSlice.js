@@ -24,11 +24,14 @@ const cartSlice = createSlice({
       }
     },
     removeProductInCart: (state, action) => {},
+    emptyCart: (state) => {
+      state.products = [];
+    },
   },
 });
 
 // export the action to change showCart state
-export const { setShowCart, addProductInCart, removeProductInCart } =
+export const { setShowCart, addProductInCart, removeProductInCart, emptyCart } =
   cartSlice.actions;
 
 // exporting reducer itself to configure it in store

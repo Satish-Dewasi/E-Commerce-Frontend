@@ -12,10 +12,10 @@ import {
   useCheckoutsMutation,
   useUpdatePaymentStatusMutation,
 } from "../redux/api/orderApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CountryDropdown from "./CountryDropdown";
-import { IoIosCloseCircleOutline } from "react-icons/io";
 import PaymentPopup from "./PaymentPopup";
+import { emptyCart } from "../redux/slices/cartSlice";
 
 const stripePromise = loadStripe(
   "pk_test_51RNQqqRef58FFuk0aFT82dOsVtv0kbeqFFXy4s0zz7pNwySq3zHBvNmz9hsRFHwj2s7M3lXqphKp8m1qt04Ddaaf00VCV5WRq0"
@@ -68,6 +68,7 @@ const CheckoutForm = ({ products, user }) => {
     useState(false);
   const [paymentStatus, setPaymentStatus] = useState("");
   const [updatePaymentStatus] = useUpdatePaymentStatusMutation();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,6 +86,8 @@ const CheckoutForm = ({ products, user }) => {
     });
 
     // console.log(result.paymentIntent.status);
+    // console.log(result.paymentIntent.id);
+
     setPaymentStatus(result.paymentIntent.status);
 
     if (result.paymentIntent.status === "succeeded") {
@@ -92,6 +95,7 @@ const CheckoutForm = ({ products, user }) => {
         paymentIntentId: result.paymentIntent.id,
         status: "succeeded",
       });
+      dispatch(emptyCart());
     }
 
     if (result.error) {
@@ -204,7 +208,7 @@ const CheckoutForm = ({ products, user }) => {
           </div>
 
           <div className="w-full md:w-[85%] ">
-            <label className="block mb-2 text-[1.8rem] md:text-[1.5rem] font-medium text-[#32325d] placeholder-[16px] placeholder-[font-weight:600] ">
+            <label className="block mb-2 text-[1.8rem] md:text-[1.5rem] font-medium text-[#32325d] placeholder-[1.6rem] placeholder-[font-weight:600] ">
               Cardholder Name
             </label>
             <input
@@ -212,7 +216,7 @@ const CheckoutForm = ({ products, user }) => {
               value={cardholderName}
               onChange={(e) => setCardholderName(e.target.value)}
               placeholder="full name on card"
-              className="p-3 text-base text-[#32325d] font-sans placeholder:text-[1.6rem] placeholder:text-[#a0aec0] placeholder:font-normal border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="p-3 text-[1.6rem] text-[#32325d] font-sans placeholder:text-[1.6rem] placeholder:text-[#a0aec0] placeholder:font-normal border rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
@@ -238,7 +242,12 @@ const CheckoutForm = ({ products, user }) => {
           </div>
         </form>
       </div>
-      {showPaymentProcessingPopUp && <PaymentPopup payment={paymentStatus} />}
+      {showPaymentProcessingPopUp && (
+        <PaymentPopup
+          popup={setShowPaymentProcessingPopUp}
+          payment={paymentStatus}
+        />
+      )}
     </div>
   );
 };
