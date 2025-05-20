@@ -85,9 +85,6 @@ const CheckoutForm = ({ products, user }) => {
       },
     });
 
-    // console.log(result.paymentIntent.status);
-    // console.log(result.paymentIntent.id);
-
     setPaymentStatus(result.paymentIntent.status);
 
     if (result.paymentIntent.status === "succeeded") {
@@ -100,7 +97,6 @@ const CheckoutForm = ({ products, user }) => {
 
     if (result.error) {
       console.error(result.error.message);
-      // alert("Payment failed");
     }
   };
 

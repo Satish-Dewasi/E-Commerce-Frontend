@@ -3,14 +3,21 @@ import { GiShoppingBag } from "react-icons/gi";
 import { FaRegUserCircle } from "react-icons/fa";
 import { CgMenu } from "react-icons/cg";
 import { MdClose } from "react-icons/md";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowCart } from "../redux/slices/cartSlice";
-import { setShowSignupPage } from "../redux/slices/userSlice";
+import {
+  setIsAdmin,
+  setIsAuthenticated,
+  setShowSignupPage,
+  setUser,
+} from "../redux/slices/userSlice";
 import { HiMiniShoppingBag } from "react-icons/hi2";
+import { useLogoutMutation } from "../redux/api/authApi";
 
 function Navbar({ pageName }) {
   const [toggleNav, setToggleNav] = useState(false);
+  const navigate = useNavigate();
 
   // console.log(pageName);
 
@@ -39,6 +46,21 @@ function Navbar({ pageName }) {
   const isAdmin = useSelector((state) => state.auth.isAdmin);
   const user = useSelector((state) => state.auth.user);
   const products = useSelector((state) => state.Cart.products);
+
+  // handle log out
+  const [logout, { isLoading }] = useLogoutMutation();
+  const handleLogout = async () => {
+    try {
+      await logout();
+      dispatch(setUser(null));
+      dispatch(setShowSignupPage(true));
+      dispatch(setIsAdmin(false));
+      dispatch(setIsAuthenticated(false));
+      navigate("/");
+    } catch (error) {
+      console.log("login failed", error);
+    }
+  };
 
   return (
     <div
@@ -118,7 +140,12 @@ function Navbar({ pageName }) {
                 </NavLink>
               )}
               {user && (
-                <div className=" cursor-pointer text-red-700 ">Logout</div>
+                <div
+                  onClick={handleLogout}
+                  className=" cursor-pointer text-red-700 "
+                >
+                  Logout
+                </div>
               )}
             </div>
           )}

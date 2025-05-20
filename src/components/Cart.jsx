@@ -4,6 +4,7 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowCart } from "../redux/slices/cartSlice";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Cart() {
   const dispatch = useDispatch();
@@ -15,8 +16,6 @@ function Cart() {
   const products = useSelector((state) => state.Cart.products);
   const user = useSelector((state) => state.auth.user);
 
-  //console.log(products);
-
   const subtotal = products.reduce((total, product) => {
     return total + product.price * product.quantity;
   }, 0);
@@ -24,8 +23,12 @@ function Cart() {
   const navigate = useNavigate();
 
   const handleCheckout = () => {
-    dispatch(setShowCart(false));
-    navigate("orders/checkouts");
+    if (!user) {
+      toast.error("Please login first to checkout");
+    } else {
+      navigate("orders/checkouts");
+      dispatch(setShowCart(false));
+    }
   };
 
   const scrollRef = useRef(null);
@@ -77,7 +80,7 @@ function Cart() {
           ) : (
             <div
               ref={scrollRef}
-              className=" relative w-full h-[58.5%] max-h-[58.5vh] overflow-y-auto  bg-en-200 border-b border-slate-300 "
+              className=" relative w-full h-[52.5%] max-h-[58.5vh] overflow-y-auto  bg-en-200 border-b border-slate-300 "
             >
               {products.map((product) => (
                 <div

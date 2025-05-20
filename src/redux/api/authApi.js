@@ -68,6 +68,13 @@ export const authApi = createApi({
       },
     }),
 
+    logout: builder.mutation({
+      query: () => ({
+        url: "/logout",
+        method: "GET",
+      }),
+    }),
+
     // admin routes
     getUsers: builder.query({
       query: () => "admin/users",
@@ -75,6 +82,7 @@ export const authApi = createApi({
   }),
 });
 
-export const { useGetProfileQuery, useGetUsersQuery } = authApi;
+export const { useGetProfileQuery, useGetUsersQuery, useLogoutMutation } =
+  authApi;
 
 //   baseUrl: "https://e-commerce-backend-j03d.onrender.com/api/v1",
