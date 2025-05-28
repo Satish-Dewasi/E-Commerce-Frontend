@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setAccessToken } from "../slices/userSlice";
 
 const baseQuery = fetchBaseQuery({
-  //baseUrl: "http://localhost:5000/api/v1",
+  // baseUrl: "http://localhost:5000/api/v1",
   baseUrl: "https://e-commerce-backend-j03d.onrender.com/api/v1",
   credentials: "include",
 
@@ -58,8 +58,17 @@ export const orderApi = createApi({
         body: payload,
       }),
     }),
+    getAllOrders: builder.query({
+      query: () => ({
+        url: "/orders",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useCheckoutsMutation, useUpdatePaymentStatusMutation } =
-  orderApi;
+export const {
+  useGetAllOrdersQuery,
+  useCheckoutsMutation,
+  useUpdatePaymentStatusMutation,
+} = orderApi;

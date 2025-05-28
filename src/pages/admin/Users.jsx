@@ -33,10 +33,6 @@ function Users() {
         <h1 className=" w-[50%] font-regular font-[500] text-[2.5rem]  ">
           Users List
         </h1>
-        <button className="flex items-center gap-1 bg-green-400  roboto-regular font-[500] text-[2rem] text-[#fff] px-6 py-2 rounded-md ">
-          <p>New</p>
-          <MdAdd size={24} />
-        </button>
       </div>
 
       <div className=" mt-10 w-full h-auto  ">
@@ -46,9 +42,7 @@ function Users() {
               <th className="py-3 border border-l-gray-400 border-gray-200">
                 ID Code
               </th>
-              <th className="py-3 w-[30%] border border-gray-200">
-                Product Name
-              </th>
+              <th className="py-3 w-[30%] border border-gray-200">User Name</th>
               <th className="py-3 border border-gray-200">Email</th>
               <th className="py-3 border border-gray-200">Role</th>
               <th className="py-3 border border-gray-200">Orders</th>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import FilterSideBar from "../components/FilterSideBar";
 import { TiStarFullOutline } from "react-icons/ti";
+import { RxCross2 } from "react-icons/rx";
 import { TiStarOutline } from "react-icons/ti";
 import { TiStarHalfOutline } from "react-icons/ti";
 import { Link, useParams } from "react-router-dom";
@@ -33,6 +34,22 @@ function Products() {
         maxPrice: Number(maxPrice),
       });
 
+  const handleSearchKeyword = () => {
+    setSearchKeyword("");
+  };
+
+  const handleSort = (e) => {
+    const sortOrder = e.target.value;
+
+    const sorted = [...products].sort((a, b) => {
+      if (sortOrder === "asc") return a.price - b.price;
+      if (sortOrder === "desc") return b.price - a.price;
+      return 0;
+    });
+
+    setProducts(sorted);
+  };
+
   useEffect(() => {
     if (data) {
       setProducts(data.products);
@@ -58,9 +75,21 @@ function Products() {
         {/* products */}
         <div className=" bg-red-30 px-[4%] lg:px-[6%]  h-full w-[100%]  lg:w-[78%] flex flex-col gap-4  ">
           {/* heading */}
-          <h1 className=" capitalize mt-2 lg:mt-4 font-sans font-[500] text-[2.7rem]  ">
-            {category ? category : "All Products"}
-          </h1>
+          <div className=" flex items-center justify-start gap-20 ">
+            <h1 className=" capitalize mt-2 lg:mt-4 font-sans font-[500] text-[2.7rem]  ">
+              {category ? category : "All Products"}
+            </h1>
+            {searchKeyword != "" && (
+              <span className=" mt-7 flex  items-center gap-2 text-xl  bg-slate-200 py-2 px-4 rounded-2xl  ">
+                <p>{searchKeyword}</p>
+                <RxCross2
+                  onClick={handleSearchKeyword}
+                  className="text-[14px] cursor-pointer "
+                />
+              </span>
+            )}
+          </div>
+
           {/* navigation  */}
           <div className=" mt-2 lg:mt-4 text-[1.5rem] roboto-light text-gray-700 font-[400] ">
             Home/products
@@ -69,10 +98,16 @@ function Products() {
           <div className=" mt-2 lg:mt-4 w-full flex items-center justify-between  text-[1.6rem] roboto-regular font-[400]  ">
             <p>{products?.length !== 0 ? "Showing 1-12 of 31 results" : ""}</p>
             {products?.length !== 0 && (
-              <select>
-                <option>One</option>
-                <option>Two</option>
-                <option>Three</option>
+              <select onChange={handleSort} defaultValue="">
+                <option value="" disabled hidden>
+                  Sort
+                </option>
+                <option className=" cursor-pointer " value="asc">
+                  Price low to high
+                </option>
+                <option className=" cursor-pointer " value="desc">
+                  Price high to low
+                </option>
               </select>
             )}
           </div>
