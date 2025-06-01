@@ -11,9 +11,12 @@ import { CiLock } from "react-icons/ci";
 import Footer from "../components/Footer";
 import Cart from "../components/Cart";
 import SIgnUp from "../components/Signup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRandomProductsQuery } from "../redux/api/productApi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { IoBag } from "react-icons/io5";
+import { addProductInCart } from "../redux/slices/cartSlice";
+import toast from "react-hot-toast";
 
 function Hero() {
   const imagesBox = [
@@ -42,7 +45,7 @@ function Hero() {
         "https://res.cloudinary.com/dmrw4vltk/image/upload/v1727712493/store/man-2C_iae8ia.jpg",
     },
   ];
-
+  const navigate = useNavigate();
   const [featuredProducts, setFeaturedProducts] = useState([]);
 
   const { data, isLoading, isError, error } = useRandomProductsQuery(10);
@@ -52,6 +55,13 @@ function Hero() {
       setFeaturedProducts(data.products);
     }
   }, [data]);
+
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (product) => {
+    dispatch(addProductInCart({ product, productQuantity: 1 }));
+    toast.success("Product Added Successfully");
+  };
 
   return (
     <div
@@ -72,10 +82,10 @@ function Hero() {
           </h2>{" "}
           <div className=" mt-[60px] md:mt-5 w-[90%] sm:w-[80%] md:w-auto flex gap-16 md:block items-center flex-col  ">
             <button className=" w-full md:w-auto py-5 px-10 uppercase text-[2.2rem] md:text-[1.5rem]  bg-white text-black font-semibold hover:bg-black hover:text-white  ">
-              Shop Now
+              <Link to={"/store"}>Shop Now</Link>
             </button>
             <button className=" w-full md:w-auto py-5 px-10 uppercase text-[2.2rem] md:text-[1.5rem]  border-2 border-white text-white font-semibold hover:bg-white hover:text-black md:ml-8 ">
-              Find More
+              <Link to={"/store"}>Find More</Link>
             </button>
           </div>
         </div>
@@ -101,7 +111,7 @@ function Hero() {
                     {box.descryption}
                   </h2>
                   <button className="mt-10 sm:mt-8 w-[50%] py-5 px-10 uppercase text-[2rem] sm:text-[1.5rem]  bg-white text-black font-semibold hover:bg-black hover:text-white  ">
-                    {box.button}
+                    <Link to={"/store"}>{box.button}</Link>
                   </button>
                 </div>
               </div>
@@ -126,8 +136,19 @@ function Hero() {
               <Link
                 to={`/store/product/${product._id}`}
                 key={product._id}
-                className=" cursor-pointer  h-fit lg:h-fit "
+                className=" cursor-pointer relative  group  h-fit lg:h-fit "
               >
+                {/* Bag Icon - shown on hover */}
+                <span
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleAddToCart(product);
+                  }}
+                  className="hidden group-hover:flex absolute top-4 right-4 bg-white p-2 rounded-full shadow-md z-10"
+                >
+                  <IoBag size={20} />
+                </span>
                 <div
                   style={{
                     backgroundImage: `url(${product.images})`,
@@ -187,7 +208,7 @@ function Hero() {
                   Buy This T-shirt At 20% Discount, Use Code OFF20
                 </h2>
                 <button className=" mt-12 md:mt-8 tracking-wider max-w-[180px] w-auto h-[50px] md:h-[60px]   md:px-10 uppercase text-[2.3rem] md:text-[1.5rem]  bg-white text-black font-semibold hover:bg-black hover:text-white  ">
-                  Shop Now
+                  <Link to={"/store"}>Shop Now</Link>
                 </button>
               </div>
             </div>
