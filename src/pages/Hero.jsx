@@ -17,6 +17,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoBag } from "react-icons/io5";
 import { addProductInCart } from "../redux/slices/cartSlice";
 import toast from "react-hot-toast";
+import { FcCheckmark } from "react-icons/fc";
 
 function Hero() {
   const imagesBox = [
@@ -58,9 +59,14 @@ function Hero() {
 
   const dispatch = useDispatch();
 
+  const [clickedProduct, setClickedProduct] = useState(null);
+
   const handleAddToCart = (product) => {
     dispatch(addProductInCart({ product, productQuantity: 1 }));
     toast.success("Product Added Successfully");
+
+    setClickedProduct(product._id);
+    setTimeout(() => setClickedProduct(null), 1000);
   };
 
   return (
@@ -147,7 +153,11 @@ function Hero() {
                   }}
                   className="hidden group-hover:flex absolute top-4 right-4 bg-white p-2 rounded-full shadow-md z-10"
                 >
-                  <IoBag size={20} />
+                  {clickedProduct === product._id ? (
+                    <FcCheckmark size={20} />
+                  ) : (
+                    <IoBag size={20} />
+                  )}
                 </span>
                 <div
                   style={{
