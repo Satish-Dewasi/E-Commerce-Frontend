@@ -21,7 +21,7 @@ export const productApi = createApi({
 
   endpoints: (builder) => ({
     getAllProducts: builder.query({
-      query: ({ pageNumber, category, minPrice, maxPrice }) => {
+      query: ({ pageNumber, category, minPrice, maxPrice, keyword }) => {
         const params = new URLSearchParams();
 
         // Add parameters conditionally
@@ -29,6 +29,7 @@ export const productApi = createApi({
         if (category) params.append("category", category);
         if (minPrice) params.append("minPrice", minPrice);
         if (maxPrice) params.append("maxPrice", maxPrice);
+        if (keyword) params.append("keyword", keyword);
 
         // Return the constructed URL with query parameters
         return `/products?${params.toString()}`;
@@ -63,6 +64,13 @@ export const productApi = createApi({
       }),
     }),
 
+    getCategoriesWithProductCount: builder.query({
+      query: () => ({
+        url: `/getCategoriesWithProductCount`,
+        method: "GET",
+      }),
+    }),
+
     addNewProduct: builder.mutation({
       query: (productDetails) => ({
         url: "/admin/product/new",
@@ -83,4 +91,5 @@ export const {
   useRandomProductsQuery,
   useGetProductByCategoryQuery,
   useAddNewProductMutation,
+  useGetCategoriesWithProductCountQuery,
 } = productApi;

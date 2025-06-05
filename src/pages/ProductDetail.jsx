@@ -5,6 +5,7 @@ import { useGetProductByIDQuery } from "../redux/api/productApi";
 import { addProductInCart } from "../redux/slices/cartSlice";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
+import Footer from "../components/Footer";
 
 function ProductDetail() {
   const { category, id } = useParams();
@@ -123,6 +124,9 @@ function ProductDetail() {
           </div>
         )}
       </div>
+
+      <div className=" w-full h-1 mb-12 bg-slate-400 "></div>
+      <Footer />
     </div>
   );
 }

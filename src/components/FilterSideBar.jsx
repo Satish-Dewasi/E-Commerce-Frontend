@@ -1,46 +1,55 @@
 import React, { useEffect, useState } from "react";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 import { CiStar } from "react-icons/ci";
-import { useRandomProductsQuery } from "../redux/api/productApi";
+import {
+  useGetCategoriesWithProductCountQuery,
+  useRandomProductsQuery,
+} from "../redux/api/productApi";
 
 function FilterSideBar({
   setMinPrice,
   setMaxPrice,
   setSearchKeyword,
   products,
+  setProductCategory,
 }) {
-  const categories = [
-    {
-      name: "men",
-      stock: 7,
-    },
-    {
-      name: "women",
-      stock: 10,
-    },
-    {
-      name: "accessories",
-      stock: 12,
-    },
-  ];
+  // const categories = [
+  //   {
+  //     name: "men",
+  //     stock: 7,
+  //   },
+  //   {
+  //     name: "women",
+  //     stock: 10,
+  //   },
+  //   {
+  //     name: "accessories",
+  //     stock: 12,
+  //   },
+  // ];
 
-  const menProducts = products?.filter((product) => product.category === "men");
-  const womenProducts = products?.filter(
-    (product) => product.category === "women"
-  );
-  const accessories = products?.filter(
-    (product) => product.category === "accessories"
-  );
+  // const menProducts = products?.filter((product) => product.category === "men");
+  // const womenProducts = products?.filter(
+  //   (product) => product.category === "women"
+  // );
+  // const accessories = products?.filter(
+  //   (product) => product.category === "accessories"
+  // );
 
-  categories[0].stock = menProducts?.length || 0;
-  categories[1].stock = womenProducts?.length || 0;
-  categories[2].stock = accessories?.length || 0;
+  // categories[0].stock = menProducts?.length || 0;
+  // categories[1].stock = womenProducts?.length || 0;
+  // categories[2].stock = accessories?.length || 0;
+
   const [minThumb, setMinThumb] = useState(0);
   const [maxThumb, setMaxThumb] = useState(1000);
   const [search, setSearch] = useState("");
 
   const handleMinPriceChange = (e) => {
     setMinThumb(e.target.value);
+  };
+
+  const handleCategoryChange = (category) => {
+    setProductCategory(category);
   };
 
   const handleMaxPriceChange = (e) => {
@@ -77,6 +86,14 @@ function FilterSideBar({
 
   const { data, isLoading, isError, error } = useRandomProductsQuery(5);
   //console.log(data);
+  const {
+    data: categoriesWithCount,
+    isLoading: isCategoriesLoading,
+    isError: isCategoriesError,
+    error: categoriesError,
+  } = useGetCategoriesWithProductCountQuery();
+
+  // console.log(categoriesWithCount.categories);
 
   useEffect(() => {
     if (data) {
@@ -159,15 +176,14 @@ function FilterSideBar({
 
         {/* categories listing */}
         <div className="w-full flex flex-col items-start gap-4 mt-6 ">
-          {categories.map((category) => (
+          {categoriesWithCount?.categories.map((category) => (
             <div
-              className=" w-full roboto-regular text-[1.6rem] capitalize flex items-center justify-between "
+              onClick={() => handleCategoryChange(category.name)}
+              className=" cursor-pointer hover:text-[#0075be] w-full roboto-regular text-[1.6rem] capitalize flex items-center justify-between "
               key={category.name}
             >
-              <span className="cursor-pointer hover:text-[#0075be] ">
-                {category.name}
-              </span>
-              <p>{`(${category.stock})`}</p>
+              <span className=" ">{category.name}</span>
+              <p>{`(${category.count})`}</p>
             </div>
           ))}
         </div>

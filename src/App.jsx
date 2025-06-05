@@ -17,6 +17,7 @@ import { useGetProfileQuery } from "./redux/api/authApi";
 import Navbar from "./components/Navbar";
 import Module from "./pages/admin/Module";
 import Checkout from "./components/Checkouts";
+import Footer from "./components/Footer";
 
 function App() {
   const showCart = useSelector((state) => state.Cart.showCart);
@@ -81,6 +82,7 @@ function App() {
           {/* ordder routes */}
           <Route path="/orders/checkouts" element={<Checkout />} />
         </Routes>
+        {/* <Footer /> */}
       </main>
       <Toaster />
     </div>

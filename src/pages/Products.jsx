@@ -14,25 +14,32 @@ import {
 } from "../redux/api/productApi";
 import ProductNotFound from "../components/ProductNotFound";
 import ProductLoader from "../utils/ProductLoader";
+import { useDispatch } from "react-redux";
+import { addProductInCart } from "../redux/slices/cartSlice";
+import toast from "react-hot-toast";
+import { FcCheckmark } from "react-icons/fc";
+import { IoBag } from "react-icons/io5";
+import Footer from "../components/Footer";
+import Loader from "../components/Loader";
 
 function Products() {
   const [loading, setLoading] = useState(true);
 
   const { category } = useParams();
+  const [productCategory, setProductCategory] = useState(category);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(1000);
   const [products, setProducts] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
 
-  const { data, isLoading, isError, error } = searchKeyword
-    ? useSearchProductsQuery(searchKeyword)
-    : useGetAllProductsQuery({
-        pageNumber,
-        category,
-        minPrice: Number(minPrice),
-        maxPrice: Number(maxPrice),
-      });
+  const { data, isLoading, isError, isFetching } = useGetAllProductsQuery({
+    keyword: searchKeyword,
+    category: productCategory,
+    minPrice,
+    maxPrice,
+    pageNumber,
+  });
 
   const handleSearchKeyword = () => {
     setSearchKeyword("");
@@ -48,6 +55,16 @@ function Products() {
     });
 
     setProducts(sorted);
+  };
+  const dispatch = useDispatch();
+  const [clickedProduct, setClickedProduct] = useState(null);
+
+  const handleAddToCartOnHover = (product) => {
+    dispatch(addProductInCart({ product, productQuantity: 1 }));
+    toast.success("Product Added Successfully");
+
+    setClickedProduct(product._id);
+    setTimeout(() => setClickedProduct(null), 1000);
   };
 
   useEffect(() => {
@@ -71,9 +88,10 @@ function Products() {
           setMaxPrice={setMaxPrice}
           products={products} // remove this from here and get product directlu in filterbar
           setSearchKeyword={setSearchKeyword}
+          setProductCategory={setProductCategory}
         />
         {/* products */}
-        <div className=" bg-red-30 px-[4%] lg:px-[6%]  h-full w-[100%]  lg:w-[78%] flex flex-col gap-4  ">
+        <div className=" bg-red-30 pb-10 px-[4%] lg:px-[6%]  h-full w-[100%]  lg:w-[78%] flex flex-col gap-4  ">
           {/* heading */}
           <div className=" flex items-center justify-start gap-20 ">
             <h1 className=" capitalize mt-2 lg:mt-4 font-sans font-[500] text-[2.7rem]  ">
@@ -117,46 +135,66 @@ function Products() {
           ) : products?.length === 0 ? (
             <ProductNotFound />
           ) : (
-            <div className="mt-3 lg:mt-6 w-full h-full grid grid-cols-2  sm:grid-cols-3 gap-x-10 gap-y-[4rem]  ">
-              {products.map((product) => (
-                <Link
-                  to={`.${category ? "" : "/product"}/${product._id}`}
-                  className=" cursor-pointer  h-fit lg:h-fit "
-                  key={product._id}
-                >
-                  <div
-                    style={{
-                      backgroundImage: `url(${product.images})`,
-                    }}
-                    className="w-full bg-cover bg-center bg-no-repeat aspect-square  "
-                  ></div>
+            <div className=" relative mt-3 lg:mt-6 w-full h-full grid grid-cols-2  sm:grid-cols-3 gap-x-10 gap-y-[4rem]  ">
+              {isFetching ? (
+                <Loader />
+              ) : (
+                products.map((product) => (
+                  <Link
+                    to={`.${category ? "" : "/product"}/${product._id}`}
+                    className=" relative group cursor-pointer  h-fit lg:h-fit "
+                    key={product._id}
+                  >
+                    {/* Bag Icon - shown on hover */}
+                    <span
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleAddToCartOnHover(product);
+                      }}
+                      className="hidden group-hover:flex absolute top-4 right-4 bg-white p-2 rounded-full shadow-md z-10"
+                    >
+                      {clickedProduct === product._id ? (
+                        <FcCheckmark size={20} />
+                      ) : (
+                        <IoBag size={20} />
+                      )}
+                    </span>
 
-                  <div className=" p-2 flex flex-col font-sans w-full min-h-fit  ">
-                    <h1 className=" text-black text-[2rem] font-semibold ">
-                      {product.name}
-                    </h1>
-                    <p className=" capitalize text-gray-500 text-[1.5rem] ">
-                      {product.category}
-                    </p>
-                    <div className=" text-gray-800 text-[1.8rem] font-semibold ">
-                      {`$${product.price}`}
-                    </div>
-                    {/* rating */}
-                    <div className=" mt-2 flex text-[1.7rem] tracking-wide ">
-                      <TiStarFullOutline /> <TiStarFullOutline />
-                      <TiStarFullOutline /> <TiStarHalfOutline />{" "}
-                      <TiStarOutline />
-                    </div>
-                    {/* color */}
+                    <div
+                      style={{
+                        backgroundImage: `url(${product.images})`,
+                      }}
+                      className="w-full bg-cover bg-center bg-no-repeat aspect-square  "
+                    ></div>
 
-                    <div className=" mt-4 flex gap-4 ">
-                      <div className=" w-8 h-8 rounded-full bg-black "></div>
-                      <div className=" w-8 h-8 rounded-full bg-[#1fb1c1] "></div>
-                      <div className=" w-8 h-8 rounded-full bg-[#ce592f] "></div>
+                    <div className=" p-2 flex flex-col font-sans w-full min-h-fit  ">
+                      <h1 className=" text-black text-[2rem] font-semibold ">
+                        {product.name}
+                      </h1>
+                      <p className=" capitalize text-gray-500 text-[1.5rem] ">
+                        {product.category}
+                      </p>
+                      <div className=" text-gray-800 text-[1.8rem] font-semibold ">
+                        {`$${product.price}`}
+                      </div>
+                      {/* rating */}
+                      <div className=" mt-2 flex text-[1.7rem] tracking-wide ">
+                        <TiStarFullOutline /> <TiStarFullOutline />
+                        <TiStarFullOutline /> <TiStarHalfOutline />{" "}
+                        <TiStarOutline />
+                      </div>
+                      {/* color */}
+
+                      <div className=" mt-4 flex gap-4 ">
+                        <div className=" w-8 h-8 rounded-full bg-black "></div>
+                        <div className=" w-8 h-8 rounded-full bg-[#1fb1c1] "></div>
+                        <div className=" w-8 h-8 rounded-full bg-[#ce592f] "></div>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                ))
+              )}
             </div>
           )}
           {/* adding pagination */}
@@ -206,6 +244,8 @@ function Products() {
           </div>
         </div>
       </div>
+      <div className=" w-full h-1 mb-12 bg-slate-400 "></div>
+      <Footer />
     </div>
   );
 }
